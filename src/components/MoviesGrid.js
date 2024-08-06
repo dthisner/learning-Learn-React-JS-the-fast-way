@@ -4,8 +4,9 @@ import "../Styles.css";
 import MovieCard from "./MovieCard"
 
 export default function MoviesGrid() {
-
+  const [searchTerm, setSearchTerm] = useState("")
   const [movies, setMovies] = useState([]);
+
   useEffect(() => {
     fetch("movies.json")
       .then(resp => resp.json())
@@ -13,12 +14,16 @@ export default function MoviesGrid() {
   }, [])
 
   return (
-    <div className="movies-grid">
-      {
-        movies.map(movie => (
-          <MovieCard movie={movie} key={movie.id} />
-        ))
-      }
-    </div >
+    <div>
+      <input type="text" placeholder="Search movies..." className="search-input" />
+      <div className="movies-grid">
+        {
+          movies.map(movie => (
+            <MovieCard movie={movie} key={movie.id} />
+          ))
+        }
+      </div >
+    </div>
+
   );
 }
