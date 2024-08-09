@@ -4,13 +4,15 @@ import "../Styles.css";
 import MovieCard from "./MovieCard"
 
 export default function MoviesGrid() {
-  const listGenres = ["All Genre", "Action", "Fantasy", "Horror", "Drama"]
-  const listRatings = ["All", "Good", "Ok", "Bad"]
+  const genresDefault = "All Genres"
+  const ratingDefault = "All"
+  const listGenres = [genresDefault, "Action", "Fantasy", "Horror", "Drama"]
+  const listRatings = [ratingDefault, "Good", "Ok", "Bad"]
 
   const [searchTerm, setSearchTerm] = useState("");
   const [movies, setMovies] = useState([]);
-  const [genre, setGenre] = useState("All Genres");
-  const [rating, setRating] = useState("All");
+  const [genre, setGenre] = useState(genresDefault);
+  const [rating, setRating] = useState(ratingDefault);
 
   useEffect(() => {
     fetch("movies.json")
@@ -22,36 +24,69 @@ export default function MoviesGrid() {
     setSearchTerm(e.target.value)
   };
 
+  const handleGenreChange = (e) => {
+    setGenre(e.target.value)
+  };
+
+  const handleRatingChange = (e) => {
+    setRating(e.target.value)
+  };
+
+  const matchesGenre = (movie, genre) => {
+    return genre === genresDefault || movie.genre.toLowerCase() === genre.toLowerCase();
+  }
+
+  const matchesSearchTerm = (movie, searchTerm) => {
+    return movie.title.toLowerCase().includes(searchTerm.toLowerCase());
+  }
+
+  const matchesRating = (movie, rating) => {
+    switch (rating) {
+      case ratingDefault:
+        console.log("rating Default")
+        return true
+      case "Good":
+        console.log("Good")
+        return movie.rating >= 8;
+      case "Ok":
+        return movie.rating >= 5 && movie.rating < 8;
+      case "Bad":
+        return movie.rating < 5;
+      default:
+        return false
+    }
+  }
+
   const filteredMovies = movies.filter((movie) =>
-    movie.title.toLowerCase().includes(searchTerm.toLowerCase())
+    matchesGenre(movie, genre) &&
+    matchesRating(movie, rating) &&
+    matchesSearchTerm(movie, searchTerm)
   );
 
   return (
     <div>
-
-
       <input type="text" placeholder="Search movies..." value={searchTerm} onChange={handleSearchChange} className="search-input" />
       <div className="filter-bar">
         <div className="filter-slot">
           <label>
             Genre
           </label>
-          <select className="filter-dropdown">
+          <select value={genre} onChange={handleGenreChange} className="filter-dropdown">
             {
-              listGenres.map((genre) => (
-                <option>{genre}</option>
+              listGenres.map((genre, i) => (
+                <option key={i}>{genre}</option>
               ))
             }
           </select>
         </div>
         <div className="filter-slot">
           <label>
-            Raiting
+            Rating
           </label>
-          <select className="filter-dropdown">
+          <select value={rating} onChange={handleRatingChange} className="filter-dropdown">
             {
-              listRatings.map((raiting) => (
-                <option>{raiting}</option>
+              listRatings.map((rating, i) => (
+                <option key={i}>{rating}</option>
               ))
             }
           </select>
