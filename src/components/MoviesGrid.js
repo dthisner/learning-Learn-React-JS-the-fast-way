@@ -1,24 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import "../Styles.css";
 
 import MovieCard from "./MovieCard"
 
-export default function MoviesGrid() {
+export default function MoviesGrid({ movies }) {
   const genresDefault = "All Genres"
   const ratingDefault = "All"
   const listGenres = [genresDefault, "Action", "Fantasy", "Horror", "Drama"]
   const listRatings = [ratingDefault, "Good", "Ok", "Bad"]
 
   const [searchTerm, setSearchTerm] = useState("");
-  const [movies, setMovies] = useState([]);
   const [genre, setGenre] = useState(genresDefault);
   const [rating, setRating] = useState(ratingDefault);
-
-  useEffect(() => {
-    fetch("movies.json")
-      .then(resp => resp.json())
-      .then(data => setMovies(data))
-  }, []);
 
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value)
@@ -43,10 +36,8 @@ export default function MoviesGrid() {
   const matchesRating = (movie, rating) => {
     switch (rating) {
       case ratingDefault:
-        console.log("rating Default")
         return true
       case "Good":
-        console.log("Good")
         return movie.rating >= 8;
       case "Ok":
         return movie.rating >= 5 && movie.rating < 8;
