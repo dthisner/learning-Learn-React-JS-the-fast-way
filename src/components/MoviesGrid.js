@@ -90,8 +90,8 @@ export default function MoviesGrid({ movies, watchlist, toggleWatchlist }) {
             <MovieCard
               movie={movie}
               toggleWatchlist={toggleWatchlist}
-              key={movie.id}
               isWatchlisted={watchlist.includes(movie.id)}
+              key={movie.id}
             />
           ))
         }

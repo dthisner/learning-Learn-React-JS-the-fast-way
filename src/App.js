@@ -45,12 +45,12 @@ function App() {
             <Route path="/" element={<MoviesGrid
               movies={movies}
               watchlist={watchlist}
-              watchlistToggle={toggleWatchlist} />}
+              toggleWatchlist={toggleWatchlist} />}
             />
             <Route path="/watchlist" element={<Watchlist
               movies={movies}
               watchlist={watchlist}
-              watchlistToggle={toggleWatchlist} />}
+              toggleWatchlist={toggleWatchlist} />}
             />
           </Routes>
         </Router>
